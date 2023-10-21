@@ -1,11 +1,13 @@
 /** Start of - Action Button */
 chrome.action.onClicked.addListener((tab) => {
-    chrome.windows.create(
-        {
-            "url": tab.url,
-            "incognito": true
-        }
-    );
+    if(tab.url != 'chrome://extensions/'){
+        chrome.windows.create(
+            {
+                "url": tab.url,
+                "incognito": true
+            }
+        );
+    }
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
