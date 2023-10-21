@@ -1,21 +1,21 @@
-/** Start of - Extension action button functionalities */
+/** Start of - Action Button */
 chrome.action.onClicked.addListener((tab) => {
     chrome.windows.create(
-        { 
-            "url": tab.url, 
-            "incognito": true 
+        {
+            "url": tab.url,
+            "incognito": true
         }
     );
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId , info, tab) {
-    if(tab.incognito){
+chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+    if (tab.incognito) {
         chrome.action.disable(tab.id);
     }
 });
-/** End of - Extension action button functionalities */
+/** End of - Action Button */
 
-/** Start of - Extension context menu functionalities */
+/** Start of - Context Menu Items */
 chrome.runtime.onInstalled.addListener(async () => {
     chrome.contextMenus.create({
         id: "privysearch",
@@ -26,34 +26,34 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.contextMenus.onClicked.addListener(async (item, tab) => {
-    performActionOnAPrivateTab((tab)=>{
-        chrome.search.query(
-            {
-                tabId: tab.id,
-                text: item.selectionText
-            }
-        )
-    })
+
+    var selectedTab = undefined;
+
+    var currentWindow = await chrome.windows.getCurrent();
+    if (currentWindow.incognito) {
+        selectedTab = await createTabInWindow(currentWindow);
+    }
+    else{
+        var allExistingWindows = await chrome.windows.getAll();
+        var existingPrivateWindow = allExistingWindows.find((window) => { return window.incognito; });
+        if (existingPrivateWindow != undefined) {
+            selectedTab = await createTabInWindow(existingPrivateWindow);
+        }
+    }
+
+    if (selectedTab == undefined) {
+        let newWindow = await chrome.windows.create({ "incognito": true });
+        selectedTab = newWindow.tabs[0];
+    }
+
+    performSearch(selectedTab.id, item.selectionText);
 });
 
-async function performActionOnAPrivateTab(action){
-    await chrome.windows.getAll(undefined, (windows) => {
-        var existingPrivateWindow = windows.find((window) => {return window.incognito;})
-
-        if(existingPrivateWindow != undefined){
-            chrome.tabs.create({"active": true, "windowId": existingPrivateWindow.id}, (tab) =>{
-                action(tab)
-                chrome.windows.update( window.id, { "focused" : true } );
-            });
-        }
-        else{
-            chrome.windows.create({
-                "incognito": true
-            },
-            (newWindow) => {
-                action(newWindow.tabs[0]);
-            });
-        }
-    });
+function performSearch(tabId, text){
+    chrome.search.query({ tabId, text });
 }
-/** End of - Extension context menu functionalities */
+
+function createTabInWindow(window) {
+    return chrome.tabs.create({ "active": true, "windowId": window.id });
+}
+/** End of - Context Menu Items */
