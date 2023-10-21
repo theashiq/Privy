@@ -25,17 +25,35 @@ chrome.runtime.onInstalled.addListener(async () => {
     });
 });
 
-chrome.contextMenus.onClicked.addListener((item, tab) => {
-    chrome.windows.create({
-        "incognito": true
-    },
-    async (window) => {
+chrome.contextMenus.onClicked.addListener(async (item, tab) => {
+    performActionOnAPrivateTab((tab)=>{
         chrome.search.query(
             {
-                tabId: window.tabs[0].id,
+                tabId: tab.id,
                 text: item.selectionText
             }
         )
-    });
+    })
 });
+
+async function performActionOnAPrivateTab(action){
+    await chrome.windows.getAll(undefined, (windows) => {
+        var existingPrivateWindow = windows.find((window) => {return window.incognito;})
+
+        if(existingPrivateWindow != undefined){
+            chrome.tabs.create({"active": true, "windowId": existingPrivateWindow.id}, (tab) =>{
+                action(tab)
+                chrome.windows.update( window.id, { "focused" : true } );
+            });
+        }
+        else{
+            chrome.windows.create({
+                "incognito": true
+            },
+            (newWindow) => {
+                action(newWindow.tabs[0]);
+            });
+        }
+    });
+}
 /** End of - Extension context menu functionalities */
