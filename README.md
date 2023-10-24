@@ -1,7 +1,7 @@
-# Privy
-Privy is a Google Chrome extension. 
+![Privy](Privy/128.png)
 
-Privy can **open URL in private tab** and **search selected text in private tab**
+# Privy
+Privy is a Google Chrome extension that can **open URL in private tab** and **search selected text in private tab**
 
 ## Open in Private Tab
 Privy can open the current tab URL in a private tab. Just click the **Privy Button** on the top right corner of the browser.
