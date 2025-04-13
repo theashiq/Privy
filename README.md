@@ -1,4 +1,4 @@
-![Privy](Privy/128.png)
+![Privy](Privy-Banner.png)
 
 # Privy
 Privy is a browser extension that can **open URL in private tab** and **search selected text in private tab**
