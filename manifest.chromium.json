@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Privy",
+    "description": "Opens current webpage in a private window",
+    "version": "1.1",
+    "icons": {
+        "16": "16.png",
+        "48": "48.png",
+        "128": "128.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": ["tabs", "activeTab", "contextMenus", "search"],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_icon": {
+            "128": "128.png"
+        },
+        "default_title": "Open current page in a private window"
+    }
+}

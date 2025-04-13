@@ -1,0 +1,11 @@
+{
+    "name": "privy",
+    "version": "1.0.0",
+    "description": "Extension for Chromium and Firefox browser",
+    "scripts": {
+      "build:firefox": "node build.js firefox",
+      "build:chromium": "node build.js chromium"
+    },
+    "author": "Ashiqur Rahman",
+    "license": "MIT"
+}
