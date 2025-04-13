@@ -19,7 +19,7 @@ Search the selected text in a private tab. Select some texts in a webpage and ch
 
 # 2. Installation
 
-## 2.1 Build Instructions for Privy (Node.js)
+## 2.1 Manual Build Instructions for Privy (Node.js)
 These instructions will guide you through setting up and building the Privy project, which uses a custom Node.js script.
 
 ### 2.1.1. Clone the Repository
